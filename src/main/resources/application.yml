@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: FishCards
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/FishCardsDB
+
+jwt:
+  secret: "superSecretVerySecretKeyForJWTSigning123456"
