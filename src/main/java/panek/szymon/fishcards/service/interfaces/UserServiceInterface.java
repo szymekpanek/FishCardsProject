@@ -1,15 +1,18 @@
 package panek.szymon.fishcards.service.interfaces;
 
-import panek.szymon.fishcards.dto.UserDTO;
-import panek.szymon.fishcards.dto.UserRegisterDTO;
+import panek.szymon.fishcards.entity.User;
 
 import java.util.List;
 
 public interface UserServiceInterface {
-    UserDTO getUserById(String id);
-    List<UserDTO> getAllUsers();
-    UserDTO createUser(UserRegisterDTO userRegisterDTO);
-    UserDTO updateUser(String id, UserDTO userDTO);
+    User getUserById(String id);
+
+    List<User> getAllUsers();
+
+    User createUser(User user);
+
+    User updateUser(String id, User userDTO);
+
     void deleteUser(String id);
 }
 

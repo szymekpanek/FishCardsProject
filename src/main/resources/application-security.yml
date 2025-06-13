@@ -1,0 +1,26 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            scope:
+              - openid
+              - email
+              - profile
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+            user-name-attribute: email
+#jwt:
+#  secret: nX$7vGj3!a9PmZQk@2sTfL#yXoU&1Bv5
+#  expiration: 3600000 # Czas ważności tokena JWT w milisekundach (tutaj 1 godzina)
+#  header: Authorization
+#  prefix: Bearer
+
+

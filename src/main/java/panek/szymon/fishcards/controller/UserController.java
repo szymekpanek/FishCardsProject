@@ -1,47 +1,56 @@
 package panek.szymon.fishcards.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import panek.szymon.fishcards.controller.interfaces.UserControllerInterface;
-import panek.szymon.fishcards.dto.UserDTO;
-import panek.szymon.fishcards.dto.UserRegisterDTO;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.*;
+import panek.szymon.fishcards.entity.User;
 import panek.szymon.fishcards.service.interfaces.UserServiceInterface;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/users")
-@AllArgsConstructor
-public class UserController implements UserControllerInterface {
+@RequestMapping("/api/user")
+@RequiredArgsConstructor
+public class UserController {
     private final UserServiceInterface userService;
 
-    @Override
-    public ResponseEntity<UserDTO> getUserById(String id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @Override
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
-
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody UserRegisterDTO userRegisterDTO) {
-        return ResponseEntity.ok(userService.createUser(userRegisterDTO));
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.createUser(user));
     }
 
-    @Override
-    public ResponseEntity<UserDTO> updateUser(String id, UserDTO userDTO) {
-        return ResponseEntity.ok(userService.updateUser(id, userDTO));
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
+        return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
-    @Override
-    public ResponseEntity<Void> deleteUser(String id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/me")
+    public Map<String, Object> getCurrentUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        System.out.println("=== Pobranie użytkownika z sesji ===");
+        if (oAuth2User == null) {
+            System.out.println("Brak zalogowanego użytkownika!");
+            return Map.of("error", "Nie znaleziono użytkownika");
+        }
+
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        attributes.forEach((key, value) -> System.out.println(key + ": " + value));
+
+        return attributes;
+    }
+
+
 }

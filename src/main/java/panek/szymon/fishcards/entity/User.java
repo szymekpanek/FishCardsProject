@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import panek.szymon.fishcards.entity.Enum.Role;
 
@@ -19,9 +20,13 @@ import java.util.Set;
 public class User {
     @Id
     private String id;
-    private String username;
+    private String userName;
+    private String family_name;
+    private String given_name;
+
+    @Indexed(unique = true)
     private String email;
-    private String passwordHash;
+
     private List<String> deckIds;
     private Set<Role> roles;
 }
