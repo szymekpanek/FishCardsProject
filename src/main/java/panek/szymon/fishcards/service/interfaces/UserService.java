@@ -4,7 +4,7 @@ import panek.szymon.fishcards.entity.User;
 
 import java.util.List;
 
-public interface UserServiceInterface {
+public interface UserService {
     User getUserById(String id);
 
     List<User> getAllUsers();

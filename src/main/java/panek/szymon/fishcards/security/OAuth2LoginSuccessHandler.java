@@ -35,9 +35,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             String familyName = (String) attributes.get("family_name");
             String givenName = (String) attributes.get("given_name");
 
-            System.out.println("=== OAuth2LoginSuccessHandler: Logowanie udane ===");
-            attributes.forEach((key, value) -> System.out.println(key + ": " + value));
-
             if (email == null || name == null) {
                 throw new IllegalArgumentException("Brak wymaganych danych użytkownika!");
             }
@@ -56,6 +53,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             );
         }
 
-        response.sendRedirect("/");
+        response.sendRedirect("/api/user/me");
     }
 }

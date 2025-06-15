@@ -21,9 +21,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        System.out.println("=== OAuth2User Attributes ===");
-        attributes.forEach((key, value) -> System.out.println(key + ": " + value));
-
         String email = (String) attributes.get("email");
         String name = (String) attributes.get("name");
 
@@ -38,10 +35,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     newUser.setEmail(email);
                     newUser.setUserName(name);
                     userRepository.save(newUser);
-                    System.out.println("Zapisano nowego użytkownika: " + email);
+
                 }
         );
-
         return oAuth2User;
     }
 }
