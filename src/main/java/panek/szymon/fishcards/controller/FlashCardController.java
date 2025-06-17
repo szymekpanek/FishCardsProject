@@ -7,8 +7,10 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import panek.szymon.fishcards.dto.FlashCardCreateRequest;
 import panek.szymon.fishcards.dto.FlashCardUpdateRequest;
 import panek.szymon.fishcards.entity.FlashCard;
 import panek.szymon.fishcards.service.interfaces.FlashCardService;
@@ -80,5 +82,25 @@ public class FlashCardController {
     public ResponseEntity<Void> deleteFlashCard(@PathVariable String id) {
         flashCardService.deleteFlashCard(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Create multiple FlashCards at once")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "FlashCards created successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = FlashCard.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid request data",
+                    content = @Content)
+    })
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<FlashCard>> createMultipleFlashCards(
+            @RequestBody(description = "List of FlashCards to be created", required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = FlashCardCreateRequest.class)))
+            @org.springframework.web.bind.annotation.RequestBody List<FlashCardCreateRequest> requests) {
+
+        List<FlashCard> createdFlashCards = flashCardService.createMultipleFlashCardsFromDto(requests);
+        return new ResponseEntity<>(createdFlashCards, HttpStatus.CREATED);
     }
 }
